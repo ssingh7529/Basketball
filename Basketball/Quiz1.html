@@ -1,0 +1,95 @@
+<html>
+<style>
+ body {
+    background-image: url("images/marvel.jpg") !important;
+    background-repeat:no-repeat;
+    background-size: cover;
+    
+ }    
+  .card{
+        width:250px;
+        padding:10px;
+        margin:10px;
+        display:inline-block;
+        border-radius:50px;
+        box-shadow:black 5px 5px 5px; 
+   
+}
+     h1 {
+      color: white !important;
+    font-weight: bold;
+    text-align: center;
+    text-shadow: black 2px 2px 2px;
+
+}
+  p{
+      color: yellow;
+      text-align: center;
+        display: block;
+        margin-top: 0.67em;
+        margin-bottom: 0.67em;
+        margin-left: 0;
+        margin-right: 0;
+        font-family: 'Times New Roman', Times, serif;
+        font-weight: bold;
+        text-align: center;
+        font-size: 16px !important;
+        text-shadow: black 2px 2px 2px;
+  }
+ div{
+     text-align: center;
+ }
+
+</style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/2.3.0/mustache.min.js"></script>
+  
+  <script type="text/template" id="template">
+  <div class="card">
+        <h1> {{description}} </h1>
+        <p> 1) {{choice1}} </p>
+        <p> 2) {{choice2}}</p>
+        <p> 3) {{choice3}}</p>
+        <p> 4)  {{choice4}}</p>
+        <input id="{{id}}" type="text" placeholder="enter choice">
+    </div>
+
+
+  </script>
+  <script>
+    var data;
+    function loadJSON(){
+        $.getJSON("https://basketball-project-5f524.firebaseio.com/.json",function(results){
+            data=results;
+            displayData();
+    })}
+    function displayData(){
+    var build="";
+    var template=document.getElementById("template").innerHTML;
+    var output=document.getElementById("output");
+    console.logdata("basketball")
+    for(var key in data("basketball"))
+        build+=Mustache.render(template,data("basketball")[key]); 
+    
+     output.innerHTML=build;
+}
+   function grade(){
+       var score=0;
+       for(var i=1; i<5; i++){
+           var userAnswer=document.getElementById("q" + i).value;
+           var correctAnswer=data("basketball")["q" + i].answer;
+           if(userAnswer==correctAnswer){
+                score++;
+           }
+
+       }
+       alert("Your score is" + score)
+   }
+</script>
+<body onload="loadJSON()">
+    <div id="output"></div>
+    <center> <button onclick="grade()">grade</button> </center>
+
+</body>
+</html>
